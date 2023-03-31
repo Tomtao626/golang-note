@@ -1,6 +1,5 @@
 # 用 Go 语言学设计模式
 
-
 ## 建造型模式
 - 单例模式
   - [教程--最简单的单例模式，Go版本的实现你写对了吗？](https://mp.weixin.qq.com/s/1ZuhUA9Lt2uLFlamIY6fLQ)
