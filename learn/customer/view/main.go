@@ -3,8 +3,8 @@ package main
 //引入包
 import (
 	"fmt"
-	"go_code/customer/service"
-	"go_code/customer/model"
+	"golang-note/learn/customer/model"
+	"golang-note/learn/customer/service"
 )
 
 type CustomerView struct {
@@ -33,7 +33,7 @@ func (this *CustomerView) mainMenu() {
 	for {
 
 		fmt.Println("-----------------客户信息管理软件-----------------")
-		fmt.Println();
+		fmt.Println()
 		fmt.Println("                 1 添 加 客 户")
 		fmt.Println("                 2 修 改 客 户")
 		fmt.Println("                 3 删 除 客 户")
@@ -42,7 +42,7 @@ func (this *CustomerView) mainMenu() {
 		fmt.Print("请选择(1-5)：")
 		fmt.Scanln(&this.key)
 
-		switch (this.key) {
+		switch this.key {
 		case "1":
 			this.add()
 		case "2":
@@ -55,7 +55,7 @@ func (this *CustomerView) mainMenu() {
 		case "5":
 			this.loop = false
 		default:
-			fmt.Println("输入错误");
+			fmt.Println("输入错误")
 		}
 
 		if !this.loop {
@@ -87,7 +87,7 @@ func (this *CustomerView) list() {
 		fmt.Println(customerList[i].GetInfo())
 	}
 	fmt.Println("---------------------------客户列表完成---------------------------")
-	
+
 }
 
 //添加客户
@@ -111,20 +111,20 @@ func (this *CustomerView) add() {
 	age := 0
 	fmt.Println("年龄：")
 	fmt.Scanln(&age)
-	fmt.Println("电话：");
+	fmt.Println("电话：")
 	phone := ""
 	fmt.Scanln(&phone)
-	fmt.Println("邮箱：");
+	fmt.Println("邮箱：")
 	email := ""
 	fmt.Scanln(&email)
 
 	//根据用户输入，创建一个Customer对象
 	customer := model.NewCustomer2(name, gender, age, phone, email)
-	
-	if(this.customerService.Add(customer)){
-		fmt.Println("---------------------添加客户成功---------------------");
-	}else{
-		fmt.Println("---------------------添加客户失败---------------------");
+
+	if this.customerService.Add(customer) {
+		fmt.Println("---------------------添加客户成功---------------------")
+	} else {
+		fmt.Println("---------------------添加客户失败---------------------")
 	}
 }
 
@@ -148,22 +148,21 @@ func (this *CustomerView) delete() {
 
 	choice := ""
 	fmt.Scanln(&choice) // 可以
-	
-	if choice == "Y" || choice == "y"  {
-		
+
+	if choice == "Y" || choice == "y" {
+
 		if this.customerService.Delete(id) {
 			fmt.Println("---------------------删除完成---------------------")
 		} else {
 			fmt.Println("---------------------删除失败,id不存在---------------------")
 		}
 	}
-} 
-
+}
 
 func main() {
 
 	customerView := CustomerView{
-		loop : true,
+		loop: true,
 	}
 	customerView.customerService = service.NewCustomerService()
 	customerView.mainMenu()

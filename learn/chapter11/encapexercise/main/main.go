@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_code/chapter11/encapexercise/model"
+	"golang-note/learn/chapter11/encapexercise/model"
 )
 
 func main() {

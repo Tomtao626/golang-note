@@ -1,27 +1,27 @@
 package utils
 
 import (
-	"fmt"
-	"net"
-	"go_code/chatsys/common"
-	"errors"
 	"encoding/binary"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"golang-note/learn/chatsys/common"
+	"net"
 )
 
-//这个结构体，完成对客户端发送和接收消息包的读取
+// 这个结构体，完成对客户端发送和接收消息包的读取
 type Transfer struct {
-	Conn   net.Conn
-	Buf    [8192]byte
+	Conn net.Conn
+	Buf  [8192]byte
 }
 
-//读取客户端发送的消息包，并封装到Message
+// 读取客户端发送的消息包，并封装到Message
 func (transfer *Transfer) ServerReadPackage() (msg common.Message, err error) {
 
 	n, err := transfer.Conn.Read(transfer.Buf[0:4])
 	if n != 4 {
 		err = errors.New("read header failed")
-		return 
+		return
 	}
 	fmt.Println("read package:", transfer.Buf[0:4])
 
@@ -33,7 +33,7 @@ func (transfer *Transfer) ServerReadPackage() (msg common.Message, err error) {
 	n, err = transfer.Conn.Read(transfer.Buf[0:packLen])
 	if n != int(packLen) {
 		err = errors.New("read body failed")
-		return 
+		return
 	}
 
 	fmt.Printf("receive data:%s\n", string(transfer.Buf[0:packLen]))
@@ -41,11 +41,10 @@ func (transfer *Transfer) ServerReadPackage() (msg common.Message, err error) {
 	if err != nil {
 		fmt.Println("unmarshal failed, err:", err)
 	}
-	return 
+	return
 }
 
-
-//发送的消息包给客户端
+// 发送的消息包给客户端
 func (transfer *Transfer) ServerWritePackage(data []byte) (err error) {
 
 	packLen := uint32(len(data))
@@ -68,5 +67,5 @@ func (transfer *Transfer) ServerWritePackage(data []byte) (err error) {
 		err = errors.New("write data  failed")
 		return
 	}
-	return 
+	return
 }

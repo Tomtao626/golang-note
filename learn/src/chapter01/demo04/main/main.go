@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	//为了使用utils.go文件中的变量或函数，我们需要先引入该model的地址
-	//"go_code/chapter01/demo04/model"
+	//"golang-note/learn/chapter01/demo04/model"
 )
 
 // + 的使用

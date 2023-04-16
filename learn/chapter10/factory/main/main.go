@@ -1,7 +1,8 @@
 package main
+
 import (
 	"fmt"
-	"go_code/chapter10/factory/model"
+	"golang-note/learn/chapter10/factory/model"
 )
 
 func main() {

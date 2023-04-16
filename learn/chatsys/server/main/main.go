@@ -1,19 +1,17 @@
 package main
+
 import (
 	"fmt"
+	"golang-note/learn/chatsys/server/model"
 	"net"
 	"time"
-	"go_code/chatsys/server/model"
 )
-
-
 
 func initUserDao() {
 	//说明pool 是一个全局变量，在redis.go中初始化的
 	//因此这里可以直接使用
 	model.MyUserDao = model.NewUserMgr(pool)
 }
-
 
 func proccess(conn net.Conn) {
 
@@ -33,12 +31,11 @@ func proccess(conn net.Conn) {
 }
 
 func main() {
-	
+
 	//在服务器端链接到Redis
 	initRedis("localhost:6379", 16, 1024, time.Second*300)
 	//在服务器端初始化一个UserDao,用于操作Redis
 	initUserDao()
-
 
 	var addr = "0.0.0.0:8889"
 	fmt.Println("服务器在8889端口上监听, 等待客户端来链接...")
@@ -57,5 +54,5 @@ func main() {
 		}
 		go proccess(conn)
 	}
-	
+
 }

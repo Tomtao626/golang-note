@@ -1,7 +1,7 @@
 /*
 删除排序链表中的重复元素
 */
-package leetcode
+package main
 
 type ListNode struct {
 	Val  int

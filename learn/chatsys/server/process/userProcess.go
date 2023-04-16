@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	_ "errors"
 	"fmt"
-	"go_code/chatsys/common"
-	"go_code/chatsys/server/utils"
-	"go_code/chatsys/server/model"
+	"golang-note/learn/chatsys/common"
+	"golang-note/learn/chatsys/server/model"
+	"golang-note/learn/chatsys/server/utils"
 	"net"
 )
 
-//UserProcessor.go 相当于一个控制器,装用于处理与用户相关的
-//同时每登录一个用户，就对应一个UserProcessor的实例,
-//因此也可以看做是登录的用户
+// UserProcessor.go 相当于一个控制器,装用于处理与用户相关的
+// 同时每登录一个用户，就对应一个UserProcessor的实例,
+// 因此也可以看做是登录的用户
 type UserProcessor struct {
 	Conn   net.Conn
 	userId int //用户的id
@@ -39,7 +39,7 @@ func (up *UserProcessor) NotifyOthersUserOnline(userId int) {
 func (up *UserProcessor) NotifyUserOnline(userId int) {
 
 	// 构建通知用户上线响应消息包
-	var respMsg   common.Message
+	var respMsg common.Message
 	respMsg.Type = common.UserStatusNotifyMesType //类型为用户上线响应包类型
 	var userStatusNotifyMes common.UserStatusNotifyMes
 
@@ -61,7 +61,7 @@ func (up *UserProcessor) NotifyUserOnline(userId int) {
 
 	//因为要返回消息包给客户端，因此创建一个Transfer实例
 	tf := &utils.Transfer{
-		Conn : up.Conn,
+		Conn: up.Conn,
 	}
 	err = tf.ServerWritePackage(data)
 	if err != nil {
@@ -85,7 +85,7 @@ func (up *UserProcessor) ServerProcessLogin(msg *common.Message) (err error) {
 	//fmt.Printf("id=%v pwd=%v\n", loginMes.Id, loginMes.Pwd)
 
 	// 构建登录响应消息包
-	var resMsg   common.Message
+	var resMsg common.Message
 	resMsg.Type = common.LoginResMesType //类型为登录响应包类型
 	var loginResMes common.LoginResMes
 
@@ -95,18 +95,18 @@ func (up *UserProcessor) ServerProcessLogin(msg *common.Message) (err error) {
 	//返回登录成功的消息包
 
 	/*
-	if loginMes.Id == 100 && loginMes.Pwd == "123456" {
-		loginResMes.Code = 200
-	} else {
-		//返回登录失败的消息包
-		loginResMes.Code = 500 //500表示没有这个用户
-	}
+		if loginMes.Id == 100 && loginMes.Pwd == "123456" {
+			loginResMes.Code = 200
+		} else {
+			//返回登录失败的消息包
+			loginResMes.Code = 500 //500表示没有这个用户
+		}
 	*/
 
 	//现在改成到Redis中去验证用户是否存在
 	//规则，用户id和密码都正确 则登录成功
 	//否则, 登录失败
-	//返回登录的响应消息包 
+	//返回登录的响应消息包
 
 	//userDao这个变量，在main函数运行就已经被初始化了，是一个全局变量
 	//Login如果成功，err为nil,同时会返回一个 User 变量
@@ -115,7 +115,7 @@ func (up *UserProcessor) ServerProcessLogin(msg *common.Message) (err error) {
 	if err != nil {
 		//这里还可以加入到底是哪种登录的错误信息，然后返回不同的Code码值
 		fmt.Printf("登录有错误，错误信息为%v\n", err)
-		loginResMes.Code = 500 
+		loginResMes.Code = 500
 		//return
 	} else {
 		//没有错误
@@ -138,8 +138,6 @@ func (up *UserProcessor) ServerProcessLogin(msg *common.Message) (err error) {
 		loginResMes.User = append(loginResMes.User, userId)
 	}
 
-	
-
 	//序列化返回消息data，便于网络传输
 	data, err := json.Marshal(loginResMes)
 	if err != nil {
@@ -157,17 +155,17 @@ func (up *UserProcessor) ServerProcessLogin(msg *common.Message) (err error) {
 	fmt.Println("返回的package包=%", string(data))
 	//因为要返回消息包给客户端，因此创建一个Transfer实例
 	tf := &utils.Transfer{
-		Conn : up.Conn,
+		Conn: up.Conn,
 	}
 	err = tf.ServerWritePackage(data)
 	if err != nil {
 		fmt.Println("send msg包 failed, ", err)
 		return
 	}
-	return 	
+	return
 }
 
-//处理用户注册嘻嘻
+// 处理用户注册嘻嘻
 func (up *UserProcessor) ServerProcessRegister(msg *common.Message) (err error) {
 
 	//对msg.Data进行反序列化，得到用户名和密码
@@ -181,21 +179,20 @@ func (up *UserProcessor) ServerProcessRegister(msg *common.Message) (err error) 
 	//fmt.Printf("id=%v pwd=%v\n", loginMes.Id, loginMes.Pwd)
 
 	// 构建注册响应消息包
-	var resMsg   common.Message
+	var resMsg common.Message
 	resMsg.Type = common.RegisterResMesType //类型为注册响应包类型
 	var registerResMes common.RegisterResMes
 
-
 	//userDao这个变量，在main函数运行就已经被初始化了，是一个全局变量
-	//Register如果成功，err == nil 
-//	var user *model.User
-//	err = model.MyUserDao.Register(registerMes.User.Id, 
-//		registerMes.User.Name, registerMes.User.Pwd)
+	//Register如果成功，err == nil
+	//	var user *model.User
+	//	err = model.MyUserDao.Register(registerMes.User.Id,
+	//		registerMes.User.Name, registerMes.User.Pwd)
 
 	err = model.MyUserDao.Register(&registerMes.User)
 	if err != nil {
 		fmt.Printf("注册用户, 用户id已经占用 err=%v\n", err)
-		registerResMes.Code = 100 
+		registerResMes.Code = 100
 		//return
 	} else {
 		//没有错误
@@ -218,13 +215,13 @@ func (up *UserProcessor) ServerProcessRegister(msg *common.Message) (err error) 
 	}
 	//因为要返回消息包给客户端，因此创建一个Transfer实例
 	tf := &utils.Transfer{
-		Conn : up.Conn,
+		Conn: up.Conn,
 	}
 	err = tf.ServerWritePackage(data)
 	if err != nil {
 		fmt.Println("send msg包 failed, ", err)
 		return
 	}
-	return 
-	
+	return
+
 }

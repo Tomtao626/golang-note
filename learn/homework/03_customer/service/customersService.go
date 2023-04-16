@@ -4,7 +4,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"go_code/Demo/0801/03_customer/model"
+	"golang-note/learn/Demo/0801/03_customer/model"
 
 	"github.com/garyburd/redigo/redis"
 )

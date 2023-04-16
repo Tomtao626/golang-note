@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go_code/chatsys/common"
+	"golang-note/learn/chatsys/common"
 	"net"
 	"time"
 )
 
-//这个结构体，完成对服务器端发送和接收消息包的读取
+// 这个结构体，完成对服务器端发送和接收消息包的读取
 type Transfer struct {
-	Conn   net.Conn
-	Buf    [8192]byte
+	Conn net.Conn
+	Buf  [8192]byte
 }
 
 func (tf *Transfer) ClientReadPackage() (msg common.Message, err error) {

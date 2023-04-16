@@ -3,7 +3,7 @@ package main
 
 import (
 	"fmt"
-	"go_code/homework13day/03_customer/service"
+	"golang-note/learn/homework13day/03_customer/service"
 	"strings"
 )
 

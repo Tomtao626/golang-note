@@ -5,7 +5,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"go_code/homework13day/03_customer/model"
+	"golang-note/learn/homework13day/03_customer/model"
 	"io"
 	"os"
 )
