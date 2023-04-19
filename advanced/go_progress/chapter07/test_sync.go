@@ -1,30 +1,25 @@
 package main
 
 import (
-	"sync"
 	"fmt"
+	"sync"
 	"time"
 )
 
+var wg = sync.WaitGroup{}
 
-var wg = sync.WaitGroup{
-
-}
-
-func Hi2()  {
+func Hi2() {
 	fmt.Println("hi2执行了")
 	wg.Done()
 }
 
-func Hi1()  {
+func Hi1() {
 	fmt.Println("hi1执行了")
 	wg.Done()
 
 }
 
-
 func main() {
-
 
 	start_time := time.Now()
 	fmt.Println(start_time)
@@ -39,6 +34,5 @@ func main() {
 	end_time := time.Now()
 	fmt.Println(end_time)
 	fmt.Println(end_time.Sub(start_time))
-
 
 }

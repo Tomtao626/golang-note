@@ -9,19 +9,18 @@ type Task struct {
 	F func()
 }
 
-// 创建任务
-func NewTask(f func()) *Task  {
+// NewTask 创建任务
+func NewTask(f func()) *Task {
 	task := Task{F: f}
 	return &task
 }
 
-// 任务执行
-func (t *Task) TaskRun()  {
+// TaskRun 任务执行
+func (t *Task) TaskRun() {
 	t.F()
 }
 
-
-// 协程池
+// GoroutinePool 协程池
 type GoroutinePool struct {
 	CapNum int
 	// 进任务的管道
@@ -33,39 +32,38 @@ type GoroutinePool struct {
 func NewPool(cap_num int) *GoroutinePool {
 
 	pool := GoroutinePool{
-		CapNum:cap_num,
-		InChannel:make(chan *Task),
-		WorkChannel:make(chan *Task),
+		CapNum:      cap_num,
+		InChannel:   make(chan *Task),
+		WorkChannel: make(chan *Task),
 	}
 
 	return &pool
 }
 
-// 从InChannel管道拿到任务，放到WorkChannel
-func (p *GoroutinePool)TaskInChannelOut()  {
+// TaskInChannelOut 从InChannel管道拿到任务，放到WorkChannel
+func (p *GoroutinePool) TaskInChannelOut() {
 	for task := range p.InChannel {
 		p.WorkChannel <- task
 	}
 }
 
-// 任务执行者从WorkChannel获取任务并执行
-func (p *GoroutinePool) Worker()  {
+// Worker 任务执行者从WorkChannel获取任务并执行
+func (p *GoroutinePool) Worker() {
 
 	// WorkChannel
-	
+
 	for task := range p.WorkChannel {
 		task.TaskRun()
 		fmt.Println("任务执行完毕")
 	}
 }
 
-func (p *GoroutinePool)PoolRun()  {
+func (p *GoroutinePool) PoolRun() {
 
 	// WorkChannel获取任务，并任务执行
-	for i:=0;i<p.CapNum;i++ {
-		go p.Worker()  // 开启指定数量的协程执行任务
+	for i := 0; i < p.CapNum; i++ {
+		go p.Worker() // 开启指定数量的协程执行任务
 	}
-
 
 	// 从InChannel管道拿到任务，本质是往WorkChannel里面添加任务
 	p.TaskInChannelOut()
@@ -75,13 +73,11 @@ func (p *GoroutinePool)PoolRun()  {
 
 }
 
-
 // 1:从InChannel获取任务并写入WorkChannel
 
 // 2.从WorkChannel里面获取任务并执行
 
 // 少了往InChannel写入任务
-
 
 func main() {
 
@@ -102,10 +98,7 @@ func main() {
 		}
 	}()
 
-
 	// 任务调度
 	pool.PoolRun()
-
-
 
 }
