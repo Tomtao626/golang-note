@@ -43,6 +43,7 @@ func main() {
 	// method
 	t := reflect.TypeOf(&person)
 	fmt.Println(t.NumMethod())
+	fmt.Println(t.Elem().Field(1).Tag.Get("json"))
 	//fmt.Println(t.Method(0))
 	//fmt.Println(t.Method(1))
 	//fmt.Println(t.Method(2))
