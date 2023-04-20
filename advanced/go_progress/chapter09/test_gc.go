@@ -1,17 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "fmt"
 
 func main() {
-
-	a := 1
-
-	fmt.Println(time.Now())
-	fmt.Println("==============")
-	fmt.Println(time.Now())
-	fmt.Println(a)
-
+	// set GODEBUG=gctrace=1
+	fmt.Println("================")
 }
